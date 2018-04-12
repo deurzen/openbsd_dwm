@@ -1,0 +1,132 @@
+#!/usr/bin/perl
+
+use strict;
+use Mail::IMAPClient;
+use IO::Socket::SSL;
+
+my $username1 = 'devrzen@gmail.com';
+my $password1 = `pass email/devrzen\@gmail.com | head -n 1 |  xargs echo -n`;
+
+my $username2 = 'maxvd3@gmail.com';
+my $password2 = `pass email/maxvd3\@gmail.com | head -n 1 |  xargs echo -n`;
+
+my $username3 = 'maxvd33@gmail.com';
+my $password3 = `pass email/maxvd33\@gmail.com | head -n 1 |  xargs echo -n`;
+
+#my $username4 = 'max.psv@hotmail.com';
+#my $password4 = `pass email/max.psv\@hotmail.com | head -n 1 |  xargs echo -n`;
+
+#my $username5 = 'm.vandeurzen@student.ru.nl';
+#my $password5 = `pass email/m.vandeurzen\@student.ru.nl | head -n 1 |  xargs echo -n`;
+
+my $gmailsocket1 = IO::Socket::SSL->new(
+   PeerAddr => 'imap.gmail.com',
+   PeerPort => 993,
+  )
+  or die "socket(): $@";
+
+my $gmailsocket2 = IO::Socket::SSL->new(
+	 PeerAddr => 'imap.gmail.com',
+	 PeerPort => 993,
+	)
+	or die "socket(): $@";
+
+my $gmailsocket3 = IO::Socket::SSL->new(
+	 PeerAddr => 'imap.gmail.com',
+	 PeerPort => 993,
+	)
+	or die "socket(): $@";
+
+#my $hotmailsocket = IO::Socket::SSL->new(
+   #PeerAddr => 'outlook.office365.com',
+   #PeerPort => 993,
+  #)
+  #or die "socket(): $@";
+
+#my $rusocket = IO::Socket::SSL->new(
+   #PeerAddr => 'mail.ru.nl',
+   #PeerPort => 993,
+  #)
+  #or die "socket(): $@";
+
+my $client1 = Mail::IMAPClient->new(
+   Socket   => $gmailsocket1,
+   User     => $username1,
+   Password => $password1,
+  )
+  or die "new(): $@";
+
+my $client2 = Mail::IMAPClient->new(
+	 Socket   => $gmailsocket2,
+	 User     => $username2,
+	 Password => $password2,
+	)
+	or die "new(): $@";
+
+my $client3 = Mail::IMAPClient->new(
+	 Socket   => $gmailsocket3,
+	 User     => $username3,
+	 Password => $password3,
+	)
+	or die "new(): $@";
+
+#my $client4 = Mail::IMAPClient->new(
+   #Socket   => $hotmailsocket,
+   #User     => $username4,
+   #Password => $password4,
+  #)
+  #or die "new(): $@";
+
+#my $client5 = Mail::IMAPClient->new(
+   #Socket   => $rusocket,
+   #User     => $username5,
+   #Password => $password5,
+  #)
+  #or die "new(): $@";
+
+if ($client1->IsAuthenticated()) {
+    my $msgct1;
+
+    $client1->select("INBOX");
+    $msgct1 = $client1->unseen_count||'0';
+    print "$msgct1\n";
+}
+
+if ($client2->IsAuthenticated()) {
+		my $msgct2;
+
+		$client2->select("INBOX");
+		$msgct2 = $client2->unseen_count||'0';
+		print "$msgct2\n";
+}
+
+if ($client3->IsAuthenticated()) {
+		my $msgct3;
+
+		$client3->select("INBOX");
+		$msgct3 = $client3->unseen_count||'0';
+		print "$msgct3\n";
+}
+
+#if ($client4->IsAuthenticated()) {
+    #my $msgct4;
+
+    #$client4->select("INBOX");
+    #$msgct4 = $client4->unseen_count||'0';
+    #print "$msgct4\n";
+#}
+
+#if ($client5->IsAuthenticated()) {
+    #my $msgct5;
+
+    #$client5->select("INBOX");
+    #$msgct5 = $client5->unseen_count||'0';
+    #print "$msgct5\n";
+#}
+
+$client1->logout();
+$client2->logout();
+$client3->logout();
+#$client4->logout();
+#$client5->logout();
+

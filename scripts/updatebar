@@ -1,0 +1,29 @@
+#!/bin/zsh
+
+CLOCK='date +"%a,%e %B | %T"'
+
+while true
+do
+  if [ "$(head -n 1 /sys/class/power_supply/BAT0/status | xargs echo -n)" != "Discharging" ]
+  then
+    BAT_CHAR="▱"
+    NONBAT_CHAR="▰"
+  else
+    BAT_CHAR="▰"
+    NONBAT_CHAR="▱"
+  fi
+  BAT_BARS=$(( $(cat /sys/class/power_supply/BAT0/capacity) / 10 ))
+  NONBAT_BARS=$(( 10 - $BAT_BARS ))
+  PRINT_BAT_BARS=$(printf "${BAT_CHAR}%.0s" {1..${BAT_BARS}})
+  PRINT_NONBAT_BARS=$(printf "${NONBAT_CHAR}%.0s" {1..${NONBAT_BARS}})
+  BATTERY="${PRINT_BAT_BARS}${PRINT_NONBAT_BARS}"
+
+  MUSIC=$(mpc current)
+  if [ -n "$MUSIC" ]; then
+    MUSIC=[$MUSIC]
+  fi
+
+  xsetroot -name "[$BATTERY]  [`eval $CLOCK`];$MUSIC"
+  sleep 1
+done
+
