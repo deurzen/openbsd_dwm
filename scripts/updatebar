@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-CLOCK='date +"%a,%e %B | %T"'
+CLOCK='date +"%a, %e %B | %T"'
 
 while true
 do
@@ -12,18 +12,32 @@ do
     BAT_CHAR="▰"
     NONBAT_CHAR="▱"
   fi
-  BAT_BARS=$(( $(cat /sys/class/power_supply/BAT0/capacity) / 10 ))
+  BAT_STATUS=$(cat /sys/class/power_supply/BAT0/status)
+  if [ "${BAT_STATUS}" != "Discharging" ]
+  then
+    BAT_SYMBOL="C"
+  else
+    BAT_SYMBOL="D"
+  fi
+  BAT_PERC=$(cat /sys/class/power_supply/BAT0/capacity)
+  BAT_BARS=$(( ${BAT_PERC} / 10 ))
   NONBAT_BARS=$(( 10 - $BAT_BARS ))
   PRINT_BAT_BARS=$(printf "${BAT_CHAR}%.0s" {1..${BAT_BARS}})
-  PRINT_NONBAT_BARS=$(printf "${NONBAT_CHAR}%.0s" {1..${NONBAT_BARS}})
-  BATTERY="${PRINT_BAT_BARS}${PRINT_NONBAT_BARS}"
+  if [ "${NONBAT_BARS}" != "0" ]
+  then
+    PRINT_NONBAT_BARS=$(printf "${NONBAT_CHAR}%.0s" {1..${NONBAT_BARS}})
+  else
+    PRINT_NONBAT_BARS=""
+  fi
+  BATTERY="<${BAT_SYMBOL}> ${PRINT_BAT_BARS}${PRINT_NONBAT_BARS} ${BAT_PERC}%"
 
   MUSIC=$(mpc current)
   if [ -n "$MUSIC" ]; then
-    MUSIC=[$MUSIC]
+    MUSIC="[$MUSIC]  "
   fi
 
-  xsetroot -name "[$BATTERY]  [`eval $CLOCK`];$MUSIC"
+  xsetroot -name "${MUSIC}[$BATTERY]  [`eval $CLOCK`]"
   sleep 1
 done
+
 
