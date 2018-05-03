@@ -1,28 +1,29 @@
 /* See LICENSE file for copyright and license details. */
 #include "extensions/cyclenonmaster.c"
+#include "extensions/gaplessgrid.c"
 
 /* appearance */
 static const char *fonts[] = {
 	"terminus:size=8"
 };
 
-static const char dmenufont[]       = "terminus:size=8";
-static const char normbordercolor[] = "#404040";
-static const char normbgcolor[]     = "#202020";
-static const char normfgcolor[]     = "#c0c0c0";
-static const char selbordercolor[]  = "#c0c0c0";
-static const char selbgcolor[]      = "#404040";
-static const char selfgcolor[]      = "#f0f0f0";
-static const int showbar            = 1;        /* 0 means no bar */
-static const int topbar             = 1;        /* 0 means bottom bar */
-static const int focusonwheel       = 0;
-static const int showsystray        = 1;
+static const char dmenufont[]            = "terminus:size=8";
+static const char normbordercolor[]      = "#404040";
+static const char normbgcolor[]          = "#202020";
+static const char normfgcolor[]          = "#c0c0c0";
+static const char selbordercolor[]       = "#c0c0c0";
+static const char selbgcolor[]           = "#404040";
+static const char selfgcolor[]           = "#f0f0f0";
+static const int showbar                 = 1;
+static const int topbar                  = 1;
+static const int focusonwheel            = 0;
+static const int showsystray             = 1;
 static const int systraypinningfailfirst = 1;
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
-static const unsigned int snap      = 32;       /* snap pixel */
-static const unsigned int gappx     = 3;
-static const unsigned int systraypinning = 0;
-static const unsigned int systrayspacing = 2;
+static const unsigned borderpx           = 1;
+static const unsigned snap               = 0;
+static const unsigned gappx              = 3;
+static const unsigned systraypinning     = 0;
+static const unsigned systrayspacing     = 2;
 
 
 /* tagging */
@@ -34,7 +35,7 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       1 << 8,       1,           -1 },
+	{ "st-float",    NULL,       NULL,       0,            1,           -1 },
 };
 
 /* layout(s) */
@@ -42,7 +43,6 @@ static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] 
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
 
-#include "extensions/gaplessgrid.c"
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "[]=",      tile },    /* first entry is default */
@@ -69,19 +69,32 @@ static const Layout layouts[] = {
 static       char      dmenumon[2]  = "0"; /* component of dmenucmd, manipulated in spawn() */
 // program commands
 static const char      *dmenucmd[]  = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
-static const char        *termcmd[] = { "st", NULL };
+static const char       *rofipass[] = { "rofi-pass", NULL };
+//static const char        *termcmd[] = { "st", NULL };
+//static const char        *tmuxcmd[] = { "st", "-e", "tmux", NULL };
+//static const char        *firefox[] = { "firefox", NULL };
+//static const char    *qutebrowser[] = { "qutebrowser", NULL };
+//static const char  *qutebrowseror[] = { "qutebrowser", "-R", NULL };
+//static const char    *termneomutt[] = { "st", "-e", "zsh", "-i", "-c", "'neomutt'", NULL };
+//static const char     *termranger[] = { "w3mterm", "-e", "zsh", "-i", "-c", "'ranger'", NULL };
+//static const char  *floattermrngr[] = { "w3mterm", "-g", "120x34+203+129", "-c", "st-float", "-e", "zsh", "-i", "-c", "'ranger'", NULL };
+//static const char      *termsncli[] = { "st", "-e", "zsh", "-i", "-c", "'sncli'", NULL };
+//static const char *floattermsncli[] = { "st", "-g", "120x34+203+129", "-c", "st-float", "-e", "zsh", "-i", "-c", "'sncli'", NULL };
+//static const char        *termrtv[] = { "st", "-e", "zsh", "-i", "-c", "'rtv'", NULL };
+static const char        *termcmd[] = { "xterm", NULL };
+static const char        *tmuxcmd[] = { "xterm", "-e", "tmux", NULL };
 static const char        *firefox[] = { "firefox", NULL };
 static const char    *qutebrowser[] = { "qutebrowser", NULL };
 static const char  *qutebrowseror[] = { "qutebrowser", "-R", NULL };
-static const char    *termneomutt[] = { "st", "-e", "ksh", "-i", "-c", "'neomutt'", NULL };
-static const char     *termranger[] = { "w3mterm", "-e", "ksh", "-i", "-c", "'ranger'", NULL };
-static const char  *floattermrngr[] = { "w3mterm", "-g", "120x34+203+129", "-c", "st-float", "-e", "ksh", "-i", "-c", "'ranger'", NULL }; 
-static const char      *termsncli[] = { "st", "-e", "ksh", "-i", "-c", "'sncli'", NULL };
-static const char *floattermsncli[] = { "st", "-g", "120x34+203+129", "-c", "st-float", "-e", "ksh", "-i", "-c", "'sncli'", NULL }; 
-static const char        *termrtv[] = { "st", "-e", "ksh", "-i", "-c", "'rtv'", NULL };
+static const char    *termneomutt[] = { "xterm", "-e", "zsh", "-i", "-c", "'neomutt'", NULL };
+static const char     *termranger[] = { "w3mterm", "-e", "zsh", "-i", "-c", "'ranger'", NULL };
+static const char  *floattermrngr[] = { "w3mterm", "-g", "120x34+203+129", "-c", "xterm-float", "-e", "zsh", "-i", "-c", "'ranger'", NULL };
+static const char      *termsncli[] = { "xterm", "-e", "zsh", "-i", "-c", "'sncli'", NULL };
+static const char *floattermsncli[] = { "xterm", "-g", "120x34+203+129", "-c", "xterm-float", "-e", "zsh", "-i", "-c", "'sncli'", NULL };
+static const char        *termrtv[] = { "xterm", "-e", "zsh", "-i", "-c", "'rtv'", NULL };
 static const char   *nontransterm[] = { "w3mterm", NULL };
-static const char     *lockscreen[] = { "bash", "7lock", NULL };
-static const char          *grabc[] = { "bash", "grabc", NULL };
+static const char     *lockscreen[] = { "7lock", NULL };
+static const char          *grabc[] = { "grabc", NULL };
 
 // mpc commands
 static const char      *mpctoggle[] = { "mpc", "toggle", NULL };
@@ -92,8 +105,15 @@ static const char      *mpcrandom[] = { "mpc", "random", NULL };
 static const char      *mpcsingle[] = { "mpc", "single", NULL };
 
 // multimedia binds
-static const char *selscreenshot[]  = { "bash", "-c", "maim -s $(date +/home/deurzen/screenshots/scrots/SS_%Y-%h-%d_%H-%M-%S.png)", NULL };
-static const char *screenshot[]  = { "bash", "-c", "maim $(date +/home/deurzen/screenshots/scrots/SS_%Y-%h-%d_%H-%M-%S.png)", NULL };
+static const char       *volumeup[] = { "pactl", "set-sink-volume", "0", "+5%", NULL };
+static const char     *volumedown[] = { "pactl", "set-sink-volume", "0", "-5%", NULL };
+static const char     *volumemute[] = { "pactl", "set-sink-mute", "0", "toggle", NULL };
+static const char       *brightup[] = { "light", "-A", "15", NULL };
+static const char     *brightdown[] = { "light", "-U", "15", NULL };
+static const char        *lightup[] = { "light", "-A", "5", NULL };
+static const char      *lightdown[] = { "light", "-U", "5", NULL };
+static const char  *selscreenshot[] = { "bash", "-c", "maim -s $(date +/home/deurzen/screenshots/scrots/SS_%Y-%h-%d_%H-%M-%S.png)", NULL };
+static const char     *screenshot[] = { "bash", "-c", "maim $(date +/home/deurzen/screenshots/scrots/SS_%Y-%h-%d_%H-%M-%S.png)", NULL };
 
 // general management commands
 static const char scratchpadname[] = "scratchpad";
@@ -104,15 +124,18 @@ static Key keys[] = {
 	/* modifier                     key        function        argument */
 // program binds
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
+	{ MODKEY|ShiftMask,             XK_p,      spawn,          {.v = rofipass} },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY|ControlMask,           XK_Return, spawn,          {.v = tmuxcmd } },
+	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = nontransterm } },
 	{ MODKEY,                       XK_grave,  togglescratch,  {.v = scratchpadcmd } },
+	{ MODKEY|ShiftMask,             XK_g,      spawn,          {.v = grabc} },
+	{ MODKEY,                       XK_e,      spawn,          {.v = termneomutt} },
 	{ MODKEY,                       XK_q,      spawn,          {.v = firefox} },
 	{ MODKEY|ShiftMask,             XK_q,      spawn,          {.v = qutebrowser} },
-	{ MODKEY,                       XK_e,      spawn,          {.v = termneomutt} },
 	{ MODKEY,                       XK_f,      spawn,          {.v = termranger} },
 	{ MODKEY|ShiftMask,             XK_f,      spawn,          {.v = floattermrngr} },
 	{ MODKEY|ShiftMask,             XK_s,      spawn,          {.v = termsncli} },
-	{ MODKEY|ShiftMask,             XK_g,      spawn,          {.v = grabc} },
 	{ MODKEY,                       XK_s,      spawn,          {.v = floattermsncli} },
 	{ MODKEY,                       XK_w,      spawn,          {.v = termrtv} },
 	{ MODKEY|ShiftMask,             XK_Delete, spawn,          {.v = lockscreen} },
@@ -124,6 +147,13 @@ static Key keys[] = {
 	{ MODKEY|Mod1Mask,              XK_r,      spawn,          {.v = mpcrandom} },
 	{ MODKEY|Mod1Mask,              XK_s,      spawn,          {.v = mpcsingle} },
 // multimedia binds
+	{ 0,                            0x1008ff13,spawn,          {.v = volumeup} },
+	{ 0,                            0x1008ff11,spawn,          {.v = volumedown} },
+	{ 0,                            0x1008ff12,spawn,          {.v = volumemute} },
+	{ 0,                            0x1008ff02,spawn,          {.v = brightup} },
+	{ 0,                            0x1008ff03,spawn,          {.v = brightdown} },
+	{ ShiftMask,                    0x1008ff02,spawn,          {.v = lightup} },
+	{ ShiftMask,                    0x1008ff03,spawn,          {.v = lightdown} },
 	{ 0,                            XK_Print,  spawn,          {.v = selscreenshot} },
 	{ ShiftMask,                    XK_Print,  spawn,          {.v = screenshot} },
 // layout binds
@@ -137,7 +167,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
+	{ MODKEY,                       XK_BackSpace,zoom,         {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },

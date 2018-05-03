@@ -4,7 +4,7 @@ CLOCK='date +"%a, %e %B | %T"'
 
 while true
 do
-  if [ "$(head -n 1 /sys/class/power_supply/BAT0/status | xargs echo -n)" != "Discharging" ]
+  if [ "$(head -n 1 /sys/class/power_supply/BAT1/status | xargs echo -n)" != "Discharging" ]
   then
     BAT_CHAR="▱"
     NONBAT_CHAR="▰"
@@ -12,14 +12,14 @@ do
     BAT_CHAR="▰"
     NONBAT_CHAR="▱"
   fi
-  BAT_STATUS=$(cat /sys/class/power_supply/BAT0/status)
+  BAT_STATUS=$(cat /sys/class/power_supply/BAT1/status)
   if [ "${BAT_STATUS}" != "Discharging" ]
   then
     BAT_SYMBOL="C"
   else
     BAT_SYMBOL="D"
   fi
-  BAT_PERC=$(cat /sys/class/power_supply/BAT0/capacity)
+  BAT_PERC=$(cat /sys/class/power_supply/BAT1/capacity)
   BAT_BARS=$(( ${BAT_PERC} / 10 ))
   NONBAT_BARS=$(( 10 - $BAT_BARS ))
   PRINT_BAT_BARS=$(printf "${BAT_CHAR}%.0s" {1..${BAT_BARS}})
