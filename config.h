@@ -4,7 +4,9 @@
 
 /* appearance */
 static const char *fonts[] = {
-	"terminus:size=8"
+	"terminus:size=8",
+	"Siji:size=10",
+	"Wuncon Siji:size=10"
 };
 
 static const char dmenufont[]            = "terminus:size=8";
@@ -70,6 +72,7 @@ static       char      dmenumon[2]  = "0"; /* component of dmenucmd, manipulated
 // program commands
 static const char      *dmenucmd[]  = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
 static const char       *rofipass[] = { "rofi-pass", NULL };
+static const char      *dmenupass[] = { "dmenupass", NULL };
 //static const char        *termcmd[] = { "st", NULL };
 //static const char        *tmuxcmd[] = { "st", "-e", "tmux", NULL };
 //static const char        *firefox[] = { "firefox", NULL };
@@ -124,7 +127,7 @@ static Key keys[] = {
 	/* modifier                     key        function        argument */
 // program binds
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,             XK_p,      spawn,          {.v = rofipass} },
+	{ MODKEY|ShiftMask,             XK_p,      spawn,          {.v = dmenupass} },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY|ControlMask,           XK_Return, spawn,          {.v = tmuxcmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = nontransterm } },
