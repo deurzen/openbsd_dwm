@@ -21,9 +21,9 @@ static const int topbar                  = 1;
 static const int focusonwheel            = 0;
 static const int showsystray             = 1;
 static const int systraypinningfailfirst = 1;
-static const unsigned borderpx           = 1;
+static const unsigned borderpx           = 2;
 static const unsigned snap               = 0;
-static const unsigned gappx              = 3;
+static const unsigned gappx              = 6;
 static const unsigned systraypinning     = 0;
 static const unsigned systrayspacing     = 2;
 
@@ -38,6 +38,7 @@ static const Rule rules[] = {
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "st-float",    NULL,       NULL,       0,            1,           -1 },
+	{ "net-runelite-client-RuneLite", NULL, NULL, 1, 1, -1 },
 };
 
 /* layout(s) */
