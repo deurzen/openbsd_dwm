@@ -11,7 +11,7 @@ static const char *fonts[] = {
 
 static const char dmenufont[]            = "terminus:size=8";
 static const char normbordercolor[]      = "#404040";
-static const char normbgcolor[]          = "#202020";
+static const char normbgcolor[]          = "#282828";
 static const char normfgcolor[]          = "#c0c0c0";
 static const char selbordercolor[]       = "#c0c0c0";
 static const char selbgcolor[]           = "#404040";
@@ -37,7 +37,7 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "st-float",    NULL,       NULL,       0,            1,           -1 },
+	{ "st-float"                    , NULL, NULL, 0, 1, -1 },
 	{ "net-runelite-client-RuneLite", NULL, NULL, 1, 1, -1 },
 };
 
