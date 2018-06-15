@@ -4,12 +4,14 @@
 
 /* appearance */
 static const char *fonts[] = {
-	"terminus:size=8"
+	"terminus:size=8",
+	"Siji:size=10",
+	"Wuncon Siji:size=10"
 };
 
 static const char dmenufont[]            = "terminus:size=8";
 static const char normbordercolor[]      = "#404040";
-static const char normbgcolor[]          = "#202020";
+static const char normbgcolor[]          = "#282828";
 static const char normfgcolor[]          = "#c0c0c0";
 static const char selbordercolor[]       = "#c0c0c0";
 static const char selbgcolor[]           = "#404040";
@@ -21,7 +23,7 @@ static const int showsystray             = 1;
 static const int systraypinningfailfirst = 1;
 static const unsigned borderpx           = 1;
 static const unsigned snap               = 0;
-static const unsigned gappx              = 3;
+static const unsigned gappx              = 5;
 static const unsigned systraypinning     = 0;
 static const unsigned systrayspacing     = 2;
 
@@ -35,7 +37,8 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "st-float",    NULL,       NULL,       0,            1,           -1 },
+	{ "st-float"                    , NULL, NULL, 0, 1, -1 },
+	{ "net-runelite-client-RuneLite", NULL, NULL, 1, 1, -1 },
 };
 
 /* layout(s) */
@@ -70,28 +73,23 @@ static       char      dmenumon[2]  = "0"; /* component of dmenucmd, manipulated
 // program commands
 static const char      *dmenucmd[]  = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
 static const char       *rofipass[] = { "rofi-pass", NULL };
-//static const char        *termcmd[] = { "st", NULL };
-//static const char        *tmuxcmd[] = { "st", "-e", "tmux", NULL };
-//static const char        *firefox[] = { "firefox", NULL };
-//static const char    *qutebrowser[] = { "qutebrowser", NULL };
-//static const char  *qutebrowseror[] = { "qutebrowser", "-R", NULL };
-//static const char    *termneomutt[] = { "st", "-e", "zsh", "-i", "-c", "'neomutt'", NULL };
-//static const char     *termranger[] = { "w3mterm", "-e", "zsh", "-i", "-c", "'ranger'", NULL };
-//static const char  *floattermrngr[] = { "w3mterm", "-g", "120x34+203+129", "-c", "st-float", "-e", "zsh", "-i", "-c", "'ranger'", NULL };
-//static const char      *termsncli[] = { "st", "-e", "zsh", "-i", "-c", "'sncli'", NULL };
-//static const char *floattermsncli[] = { "st", "-g", "120x34+203+129", "-c", "st-float", "-e", "zsh", "-i", "-c", "'sncli'", NULL };
-//static const char        *termrtv[] = { "st", "-e", "zsh", "-i", "-c", "'rtv'", NULL };
-static const char        *termcmd[] = { "xterm", NULL };
+static const char      *dmenupass[] = { "dmenupass", NULL };
+//static const char        *termcmd[] = { "xterm", NULL };
+static const char        *termcmd[] = { "urxvt", NULL };
 static const char        *tmuxcmd[] = { "xterm", "-e", "tmux", NULL };
 static const char        *firefox[] = { "firefox", NULL };
 static const char    *qutebrowser[] = { "qutebrowser", NULL };
 static const char  *qutebrowseror[] = { "qutebrowser", "-R", NULL };
-static const char    *termneomutt[] = { "xterm", "-e", "zsh", "-i", "-c", "'neomutt'", NULL };
-static const char     *termranger[] = { "w3mterm", "-e", "zsh", "-i", "-c", "'ranger'", NULL };
+//static const char    *termneomutt[] = { "xterm", "-e", "zsh", "-i", "-c", "'neomutt'", NULL };
+//static const char     *termranger[] = { "w3mterm", "-e", "zsh", "-i", "-c", "'ranger'", NULL };
+static const char    *termneomutt[] = { "urxvt", "-e", "zsh", "-i", "-c", "'neomutt'", NULL };
+static const char     *termranger[] = { "urxvt", "-e", "zsh", "-i", "-c", "'ranger'", NULL };
 static const char  *floattermrngr[] = { "w3mterm", "-g", "120x34+203+129", "-c", "xterm-float", "-e", "zsh", "-i", "-c", "'ranger'", NULL };
-static const char      *termsncli[] = { "xterm", "-e", "zsh", "-i", "-c", "'sncli'", NULL };
+//static const char      *termsncli[] = { "xterm", "-e", "zsh", "-i", "-c", "'sncli'", NULL };
+static const char      *termsncli[] = { "urxvt", "-e", "zsh", "-i", "-c", "'sncli'", NULL };
 static const char *floattermsncli[] = { "xterm", "-g", "120x34+203+129", "-c", "xterm-float", "-e", "zsh", "-i", "-c", "'sncli'", NULL };
-static const char        *termrtv[] = { "xterm", "-e", "zsh", "-i", "-c", "'rtv'", NULL };
+//static const char        *termrtv[] = { "xterm", "-e", "zsh", "-i", "-c", "'rtv'", NULL };
+static const char        *termrtv[] = { "urxvt", "-e", "zsh", "-i", "-c", "'rtv'", NULL };
 static const char   *nontransterm[] = { "w3mterm", NULL };
 static const char     *lockscreen[] = { "7lock", NULL };
 static const char          *grabc[] = { "grabc", NULL };
@@ -124,7 +122,7 @@ static Key keys[] = {
 	/* modifier                     key        function        argument */
 // program binds
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,             XK_p,      spawn,          {.v = rofipass} },
+	{ MODKEY|ShiftMask,             XK_p,      spawn,          {.v = dmenupass} },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY|ControlMask,           XK_Return, spawn,          {.v = tmuxcmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = nontransterm } },
