@@ -7,8 +7,13 @@ static const char *fonts[] = {
 	"terminus:size=8",
 	"Siji:size=10",
 	"Wuncon Siji:size=10"
+	"Monaco:size=10:antialias=false",
+	"Fantasque Sans Mono:size=13:antialias=false",
 };
 
+//static const char dmenufont[]            = "terminus:size=12";
+//static const char dmenufont[]            = "terminus:size=13";
+//static const char dmenufont[]            = "Fantasque Sans Mono:size=13";
 static const char dmenufont[]            = "terminus:size=8";
 static const char normbordercolor[]      = "#404040";
 static const char normbgcolor[]          = "#282828";
@@ -23,7 +28,7 @@ static const int showsystray             = 1;
 static const int systraypinningfailfirst = 1;
 static const unsigned borderpx           = 1;
 static const unsigned snap               = 0;
-static const unsigned gappx              = 5;
+static const unsigned gappx              = 7;
 static const unsigned systraypinning     = 0;
 static const unsigned systrayspacing     = 2;
 
@@ -37,6 +42,7 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
+	{ "scratchpad"                  , NULL, NULL, 0, 1, -1 },
 	{ "st-float"                    , NULL, NULL, 0, 1, -1 },
 	{ "net-runelite-client-RuneLite", NULL, NULL, 1, 1, -1 },
 };
@@ -74,25 +80,22 @@ static       char      dmenumon[2]  = "0"; /* component of dmenucmd, manipulated
 static const char      *dmenucmd[]  = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
 static const char       *rofipass[] = { "rofi-pass", NULL };
 static const char      *dmenupass[] = { "dmenupass", NULL };
-//static const char        *termcmd[] = { "xterm", NULL };
 static const char        *termcmd[] = { "urxvt", NULL };
 static const char        *tmuxcmd[] = { "xterm", "-e", "tmux", NULL };
 static const char        *firefox[] = { "firefox", NULL };
+static const char       *chromium[] = { "chromium", NULL };
 static const char    *qutebrowser[] = { "qutebrowser", NULL };
 static const char  *qutebrowseror[] = { "qutebrowser", "-R", NULL };
-//static const char    *termneomutt[] = { "xterm", "-e", "zsh", "-i", "-c", "'neomutt'", NULL };
-//static const char     *termranger[] = { "w3mterm", "-e", "zsh", "-i", "-c", "'ranger'", NULL };
 static const char    *termneomutt[] = { "urxvt", "-e", "zsh", "-i", "-c", "'neomutt'", NULL };
 static const char     *termranger[] = { "urxvt", "-e", "zsh", "-i", "-c", "'ranger'", NULL };
 static const char  *floattermrngr[] = { "w3mterm", "-g", "120x34+203+129", "-c", "xterm-float", "-e", "zsh", "-i", "-c", "'ranger'", NULL };
-//static const char      *termsncli[] = { "xterm", "-e", "zsh", "-i", "-c", "'sncli'", NULL };
 static const char      *termsncli[] = { "urxvt", "-e", "zsh", "-i", "-c", "'sncli'", NULL };
 static const char *floattermsncli[] = { "xterm", "-g", "120x34+203+129", "-c", "xterm-float", "-e", "zsh", "-i", "-c", "'sncli'", NULL };
-//static const char        *termrtv[] = { "xterm", "-e", "zsh", "-i", "-c", "'rtv'", NULL };
 static const char        *termrtv[] = { "urxvt", "-e", "zsh", "-i", "-c", "'rtv'", NULL };
 static const char   *nontransterm[] = { "w3mterm", NULL };
 static const char     *lockscreen[] = { "7lock", NULL };
 static const char          *grabc[] = { "grabc", NULL };
+static const char        *devterm[] = { "devterm", NULL };
 
 // mpc commands
 static const char      *mpctoggle[] = { "mpc", "toggle", NULL };
@@ -103,8 +106,8 @@ static const char      *mpcrandom[] = { "mpc", "random", NULL };
 static const char      *mpcsingle[] = { "mpc", "single", NULL };
 
 // multimedia binds
-static const char       *volumeup[] = { "pactl", "set-sink-volume", "0", "+5%", NULL };
-static const char     *volumedown[] = { "pactl", "set-sink-volume", "0", "-5%", NULL };
+static const char       *volumeup[] = { "pactl", "set-sink-volume", "0", "+10%", NULL };
+static const char     *volumedown[] = { "pactl", "set-sink-volume", "0", "-10%", NULL };
 static const char     *volumemute[] = { "pactl", "set-sink-mute", "0", "toggle", NULL };
 static const char       *brightup[] = { "light", "-A", "15", NULL };
 static const char     *brightdown[] = { "light", "-U", "15", NULL };
@@ -115,7 +118,8 @@ static const char     *screenshot[] = { "bash", "-c", "maim $(date +/home/deurze
 
 // general management commands
 static const char scratchpadname[] = "scratchpad";
-static const char *scratchpadcmd[] = { "scratchpadterm", "-g", "140x38", NULL };
+static const char *scratchpadcmd[] = { "xterm", "-title", "scratchpad", "-g", "127x36+290+166", NULL };
+static const char *killdwm[]       = { "killdwm", NULL };
 
 
 static Key keys[] = {
@@ -124,12 +128,13 @@ static Key keys[] = {
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_p,      spawn,          {.v = dmenupass} },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY|ControlMask,           XK_Return, spawn,          {.v = tmuxcmd } },
+	{ MODKEY|ControlMask,           XK_Return, spawn,          {.v = devterm } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = nontransterm } },
 	{ MODKEY,                       XK_grave,  togglescratch,  {.v = scratchpadcmd } },
 	{ MODKEY|ShiftMask,             XK_g,      spawn,          {.v = grabc} },
 	{ MODKEY,                       XK_e,      spawn,          {.v = termneomutt} },
 	{ MODKEY,                       XK_q,      spawn,          {.v = firefox} },
+	{ MODKEY|ControlMask,           XK_q,      spawn,          {.v = chromium} },
 	{ MODKEY|ShiftMask,             XK_q,      spawn,          {.v = qutebrowser} },
 	{ MODKEY,                       XK_f,      spawn,          {.v = termranger} },
 	{ MODKEY|ShiftMask,             XK_f,      spawn,          {.v = floattermrngr} },
@@ -175,7 +180,8 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_b,      togglebar,      {0} },
-	{ MODKEY|Mod1Mask|ShiftMask,    XK_x,      quit,           {0} },
+	//{ MODKEY|Mod1Mask|ShiftMask,    XK_x,      quit,           {0} },
+	{ MODKEY|Mod1Mask|ShiftMask,    XK_x,      spawn,          {.v = killdwm} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY|ShiftMask|ControlMask, XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },

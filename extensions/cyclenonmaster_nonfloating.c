@@ -11,7 +11,7 @@ cyclenonmaster(const Arg *arg)
 			lm = c;
 			int nm = selmon->nmaster;
 			while (c && nm > 0) {
-				if (ISVISIBLE(c)) {
+				if (ISVISIBLE(c) && !c->isfloating) {
 					--nm;
 					lm = c;
 				}
@@ -24,7 +24,7 @@ cyclenonmaster(const Arg *arg)
 
 	// Find first nonmaster client
 	fc = lm ? lm->next : selmon->clients;
-	for (; fc && (!ISVISIBLE(fc)); fc = fc->next);
+	for (; fc && (!ISVISIBLE(fc) || fc->isfloating); fc = fc->next);
 	if (!fc)
 		return;
 
@@ -32,7 +32,7 @@ cyclenonmaster(const Arg *arg)
 	{
 		Client *c = fc;
 		while (c) {
-			if (ISVISIBLE(c))
+			if (ISVISIBLE(c) && !c->isfloating)
 				lc = c;
 			c = c->next;
 		}
